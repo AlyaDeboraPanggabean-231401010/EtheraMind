@@ -79,12 +79,6 @@ class CategoryScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final category = categories[index];
                   return GestureDetector(
-                    onTap: () {
-                      // TODO: nanti arahkan ke halaman quiz
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Kamu pilih ${category['title']}')),
-                      );
-                    },
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,

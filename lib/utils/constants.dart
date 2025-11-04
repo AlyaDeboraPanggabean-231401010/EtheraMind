@@ -5,8 +5,8 @@ class AppConstants {
   static const String appName = 'EtheraMind';
   static const String fontFamily = 'Montserrat';
 
-  // TODO: nanti tambahkan kalau sudah ada penyimpanan / timer quiz
-  static const int quizTimerSeconds = 30;
+ static const int quizTimerSeconds = 30; // waktu tiap soal
+  static const int questionsPerCategory = 5;
 }
 
 class AppColors {
