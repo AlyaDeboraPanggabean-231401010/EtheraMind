@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:etheramind/screens/category_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -139,11 +140,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       // final quizProvider = Provider.of<QuizProvider>(context, listen: false);
       // quizProvider.setUserName(name);
 
-      // TODO: arahkan ke CategoryScreen nanti
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const CategoryScreen()),
-      // );
+      
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const CategoryScreen()),
+      );
 
       debugPrint('Nama dimasukkan: $name');
     }
