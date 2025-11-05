@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async'; 
@@ -25,17 +27,12 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeTimer();
-  }
-
-  void _initializeTimer() {
-    final etheramindProvider = Provider.of<EtheramindProvider>(context, listen: false);
-    etheramindProvider.startTimerForQuiz();
     _startTimer();
   }
 
   void _startTimer() {
-    _timer?.cancel(); // Cancel timer lama dulu
+    final etheramindProvider = Provider.of<EtheramindProvider>(context, listen: false);
+    etheramindProvider.startTimer();
     
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       final provider = Provider.of<EtheramindProvider>(context, listen: false);
@@ -51,12 +48,6 @@ class _QuizScreenState extends State<QuizScreen> {
     final etheramindProvider = Provider.of<EtheramindProvider>(context, listen: false);
     etheramindProvider.stopTimer();
     _timer?.cancel();
-  }
-
-  void _resetAndStartTimer() {
-    final etheramindProvider = Provider.of<EtheramindProvider>(context, listen: false);
-    etheramindProvider.resetTimerForNextQuestion();
-    _startTimer(); // Start timer baru
   }
 
   @override
@@ -76,6 +67,7 @@ class _QuizScreenState extends State<QuizScreen> {
         final isLastQuestion = currentQuestionIndex == AppConstants.questionsPerCategory - 1;
 
         return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background, // ✅ BACKGROUND THEME
           appBar: AppBar(
             title: Text(widget.category.name),
             backgroundColor: widget.category.color,
@@ -142,11 +134,11 @@ class _QuizScreenState extends State<QuizScreen> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: currentQuestionIndex > 0 ? () {
-                            _goToPreviousQuestion(etheramindProvider);
+                            etheramindProvider.previousQuestion();
                           } : null,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[300],
-                            foregroundColor: Colors.grey[600],
+                            backgroundColor: Theme.of(context).colorScheme.surface, // ✅ THEME
+                            foregroundColor: Theme.of(context).colorScheme.onSurface, // ✅ THEME
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -162,11 +154,16 @@ class _QuizScreenState extends State<QuizScreen> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: userAnswer != -1 ? () {
-                            _goToNextQuestion(etheramindProvider, isLastQuestion);
+                            if (isLastQuestion) {
+                              _stopTimer();
+                              _showSubmitDialog(etheramindProvider);
+                            } else {
+                              etheramindProvider.nextQuestion();
+                            }
                           } : null,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
+                            backgroundColor: Theme.of(context).colorScheme.primary, // ✅ THEME
+                            foregroundColor: Theme.of(context).colorScheme.onPrimary, // ✅ THEME
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -188,33 +185,17 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  void _goToNextQuestion(EtheramindProvider provider, bool isLastQuestion) {
-    if (isLastQuestion) {
-      _stopTimer();
-      _showSubmitDialog(provider);
-    } else {
-      provider.nextQuestion();
-      _resetAndStartTimer(); // ✅ RESET TIMER SETIAP PINDAH SOAL
-    }
-  }
-
-  void _goToPreviousQuestion(EtheramindProvider provider) {
-    provider.previousQuestion();
-    _resetAndStartTimer(); // ✅ RESET TIMER JUGA SAAT KE SOAL SEBELUMNYA
-  }
-
   void _handleTimeUp(EtheramindProvider etheramindProvider) {
     final currentQuestionIndex = etheramindProvider.getCurrentQuestionIndex(widget.category.id);
     final isLastQuestion = currentQuestionIndex == AppConstants.questionsPerCategory - 1;
 
-    etheramindProvider.answerQuestion(currentQuestionIndex, -1); // -1 untuk waktu habis
+    etheramindProvider.answerQuestion(currentQuestionIndex, -1);
     
     if (isLastQuestion) {
       _stopTimer();
       _navigateToResults();
     } else {
       etheramindProvider.nextQuestion();
-      _resetAndStartTimer(); // ✅ RESET TIMER SETELAH TIME UP
     }
   }
 
@@ -222,12 +203,28 @@ class _QuizScreenState extends State<QuizScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Selesai Quiz?'),
-        content: const Text('Apakah Anda yakin ingin menyelesaikan quiz ini?'),
+        backgroundColor: Theme.of(context).colorScheme.surface, // ✅ THEME
+        title: Text(
+          'Selesai Quiz?',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface, // ✅ THEME
+          ),
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin menyelesaikan quiz ini?',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface, // ✅ THEME
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
+            child: Text(
+              'Batal',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface, // ✅ THEME
+              ),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -235,9 +232,14 @@ class _QuizScreenState extends State<QuizScreen> {
               _navigateToResults();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
+              backgroundColor: Theme.of(context).colorScheme.primary, // ✅ THEME
             ),
-            child: const Text('Ya, Selesai'),
+            child: Text(
+              'Ya, Selesai',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary, // ✅ THEME
+              ),
+            ),
           ),
         ],
       ),
