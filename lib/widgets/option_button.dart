@@ -86,15 +86,16 @@ class OptionButton extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 16,
-                    color: textColor,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                child: 
+                  Text(
+                    text,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 16,
+                      color: textColor,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    ),
                   ),
-                ),
               ),
               if (showAnswer && isCorrect)
                 Icon(

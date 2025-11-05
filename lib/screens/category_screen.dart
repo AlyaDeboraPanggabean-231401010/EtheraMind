@@ -47,7 +47,6 @@ class CategoryScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Message - INI YANG KITA TEST
             if (etheramindProvider.user != null) ...[
               Text(
                 'Halo, ${etheramindProvider.user!.name}!',
@@ -125,3 +124,4 @@ class CategoryScreen extends StatelessWidget {
     );
   }
 }
+

@@ -105,7 +105,7 @@ class ResultScreen extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: AppColors.surface,
-                      ),
+                     ),
                     ),
                     const SizedBox(height: 12),
                     Expanded(
