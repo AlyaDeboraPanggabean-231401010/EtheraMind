@@ -5,7 +5,7 @@ class AppConstants {
   static const String appName = 'EtheraMind';
   static const String fontFamily = 'Montserrat';
 
- static const int quizTimerSeconds = 30; // waktu tiap soal
+  static const int quizTimerSeconds = 30; // waktu tiap soal
   static const int questionsPerCategory = 5;
 }
 

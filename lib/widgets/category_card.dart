@@ -5,13 +5,11 @@ import 'package:etheramind/models/quiz_category.dart';
 class CategoryCard extends StatelessWidget {
   final QuizCategory category;
   final VoidCallback onTap;
-  final int score;
 
   const CategoryCard({
     super.key,
     required this.category,
     required this.onTap,
-    this.score = 0,
   });
 
   @override
@@ -55,13 +53,12 @@ class CategoryCard extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   category.name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Montserrat',
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onSurface, // ✅ THEME
                   ),
-                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -77,24 +74,6 @@ class CategoryCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),
-                if (score > 0)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withOpacity(0.5)),
-                    ),
-                    child: Text(
-                      'Score: $score/5',
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
               ],
             ),
           ),

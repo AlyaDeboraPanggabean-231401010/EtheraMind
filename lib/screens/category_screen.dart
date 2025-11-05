@@ -18,22 +18,23 @@ class CategoryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Pilih Kategori',
           style: TextStyle(
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.onPrimary, // ✅ TEST 1
           ),
         ),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 0,
-        centerTitle: true, // Tambahkan ini untuk membuat title di tengah
-                actions: [
-          // Tombol toggle theme
+        centerTitle: true,
+        actions: [
           IconButton(
             icon: Icon(
               themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: Theme.of(context).colorScheme.onPrimary, // ✅ TEST 2
             ),
             onPressed: () {
               themeProvider.toggleTheme();
@@ -46,7 +47,6 @@ class CategoryScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Message
             if (etheramindProvider.user != null) ...[
               Text(
                 'Halo, ${etheramindProvider.user!.name}!',
@@ -54,7 +54,7 @@ class CategoryScreen extends StatelessWidget {
                   fontFamily: 'Montserrat',
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: Theme.of(context).colorScheme.onBackground, // ✅ TEST 3
                 ),
               ),
               const SizedBox(height: 8),
@@ -63,19 +63,18 @@ class CategoryScreen extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontSize: 16,
-                  color: AppColors.textSecondary,
+                  color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7), // ✅ TEST 4
                 ),
               ),
               const SizedBox(height: 24),
             ] else ...[
-              // Fallback jika user null
               Text(
                 'Halo!',
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: Theme.of(context).colorScheme.onBackground, // ✅ TEST 5
                 ),
               ),
               const SizedBox(height: 8),
@@ -84,13 +83,13 @@ class CategoryScreen extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontSize: 16,
-                  color: AppColors.textSecondary,
+                  color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7), // ✅ TEST 6
                 ),
               ),
               const SizedBox(height: 24),
             ],
             
-            // Categories Grid menggunakan CategoryCard
+            // Categories Grid
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -102,13 +101,10 @@ class CategoryScreen extends StatelessWidget {
                 itemCount: categories.length,
                 itemBuilder: (context, index) {
                   final category = categories[index];
-                  final score = etheramindProvider.getScoreForCategory(category.id);
                   
                   return CategoryCard(
                     category: category,
-                    score: score,
-                   onTap: () {
-                      // RESET: Hapus jawaban dan skor sebelumnya
+                    onTap: () {
                       etheramindProvider.resetCategory(category.id);
                       etheramindProvider.setCurrentCategory(category.id);
                       Navigator.push(
@@ -128,3 +124,4 @@ class CategoryScreen extends StatelessWidget {
     );
   }
 }
+
