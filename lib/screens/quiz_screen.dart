@@ -50,6 +50,13 @@ class _QuizScreenState extends State<QuizScreen> {
     _timer?.cancel();
   }
 
+  void _resetAndStartTimer() {
+    _timer?.cancel(); // Stop timer lama
+    final etheramindProvider = Provider.of<EtheramindProvider>(context, listen: false);
+    etheramindProvider.resetTimerForNextQuestion(); // Reset waktu di provider
+    _startTimer(); // Start timer baru
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -67,7 +74,7 @@ class _QuizScreenState extends State<QuizScreen> {
         final isLastQuestion = currentQuestionIndex == AppConstants.questionsPerCategory - 1;
 
         return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background, // ✅ BACKGROUND THEME
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
             title: Text(widget.category.name),
             backgroundColor: widget.category.color,
@@ -135,6 +142,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         child: ElevatedButton(
                           onPressed: currentQuestionIndex > 0 ? () {
                             etheramindProvider.previousQuestion();
+                             _resetAndStartTimer();
                           } : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).colorScheme.surface, // ✅ THEME
@@ -159,6 +167,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               _showSubmitDialog(etheramindProvider);
                             } else {
                               etheramindProvider.nextQuestion();
+                               _resetAndStartTimer();
                             }
                           } : null,
                           style: ElevatedButton.styleFrom(
@@ -196,6 +205,7 @@ class _QuizScreenState extends State<QuizScreen> {
       _navigateToResults();
     } else {
       etheramindProvider.nextQuestion();
+       _resetAndStartTimer();
     }
   }
 
